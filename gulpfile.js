@@ -18,7 +18,9 @@ var babel         = require('gulp-babel');
             .src(paths.src)
             .pipe(plumber())
             .pipe(ngAnnotate())
-            .pipe(babel())
+            .pipe(babel({
+                presets: ['es2015']
+            }))
             .pipe(concat('ng-persist.js'))
             .pipe(gulp.dest(paths.dist));
     };

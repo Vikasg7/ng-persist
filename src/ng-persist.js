@@ -1,4 +1,4 @@
-(() => {
+((angular, window, cordova) => {
 
     'use strict';
 
@@ -149,30 +149,22 @@
             }
         };
 
+
+        // calling getAdapter just ones and keeping the reference for next calls.
+        // it will avoid creation of new object each time getAdapter is called.
+        const adapter = getAdapter();
         return {
             set(namespace = '', key = null, val = '') {
                 const deferred = $q.defer();
-                const adapter = getAdapter();
                 adapter
                     .write(namespace, key, val)
-                    .then(() => {
-                        deferred.resolve(val);
-                    })
-                    .catch((err) => {
-                        // if not browser, write to local storage
-                        // otherwise reject
-                        if (!isBrowser) {
-                            const localStorageAdapter = new LocalStorageAdapter();
-                            return localStorageAdapter.write(namespace, key, val);
-                        } else {
-                            deferred.reject(err);
-                        }
-                    });
+                    .then(deferred.resolve)
+                    // isBrowser check here was meaningless in previous api.
+                    .catch(deferred.reject);
                 return deferred.promise;
             },
             get(namespace = '', key = null, fallback = '') {
                 const deferred = $q.defer();
-                const adapter = getAdapter();
                 adapter
                     .read(namespace, key)
                     .then((val) => {
@@ -183,13 +175,11 @@
                         }
                     })
                     .catch(() => {
-                        // always resolve with the fallback value
-                        deferred.resolve(fallback);
+                        deferred.reject(fallback)
                     });
                 return deferred.promise;
             },
             remove(namespace, key) {
-                const adapter = getAdapter();
                 return adapter.remove(namespace, key);
             },
         };
@@ -197,4 +187,4 @@
     $persist.$inject = ['$q', '$localStorage'];
     angular.module('ng-persist').factory('$persist', $persist);
 
-}());
+})(angular, window, cordova);
