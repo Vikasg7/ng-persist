@@ -1,4 +1,4 @@
-((angular, window, cordova) => {
+((angular, window) => {
 
     'use strict';
 
@@ -187,4 +187,4 @@
     $persist.$inject = ['$q', '$localStorage'];
     angular.module('ng-persist').factory('$persist', $persist);
 
-})(angular, window, cordova);
+})(angular, window);

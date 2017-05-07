@@ -4,7 +4,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-(function (angular, window, cordova) {
+(function (angular, window) {
 
     'use strict';
 
@@ -233,4 +233,4 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     };
     $persist.$inject = ['$q', '$localStorage'];
     angular.module('ng-persist').factory('$persist', $persist);
-})(angular, window, cordova);
+})(angular, window);
